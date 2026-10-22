@@ -31,4 +31,9 @@ describe('Cadastrar ususario UseCase', function () {
 
         expect(() => cadastrarUsuarioUsecase({})).toThrow(new AppError(AppError.dependencias));
     });
+
+    test('Deve retornar um erro se algum campo obrigatorio nao for fornecido', async function () {
+        const sut = cadastrarUsuarioUsecase({ usuariosRepository })
+        await expect(() => sut({})).rejects.toThrow(new AppError(AppError.parametrosObrigatoriosAusentes))
+    })
 });

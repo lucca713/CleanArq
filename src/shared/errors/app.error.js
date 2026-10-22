@@ -5,10 +5,6 @@ module.exports = class AppError extends Error {
     }
 
     static dependencias = 'Alguma dependendcias obrigatorio nao foi fornecida';
-    static validarEmail = 'email invalido';
-    static validarTelefone = 'telefone invalido';
-    static validarCPF = 'CPF invalido';
-    static validarEndereco = 'endereco invalido';
-    static validarNomeCompleto = 'nome_completo invalido';
+    static parametrosObrigatoriosAusentes = 'Algum parametro obrigatorio nao foi fornecido'
 
 }
