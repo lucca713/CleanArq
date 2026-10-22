@@ -24,5 +24,10 @@ describe('Cadastrar ususario UseCase', function () {
         expect(output).toBeUndefined();
         expect(usuariosRepository.cadastrar).toHaveBeenCalledWith(usuarioDTO);
         expect(usuariosRepository.cadastrar).toHaveBeenCalledTimes(1);
-    })
+    });
+
+    test('Deve retornar um erro quando o repositorio falhar', function () {
+
+        expect(() => cadastrarUsuarioUsecase({})).toThrow('Repository de usuario falhou')
+    });
 })
