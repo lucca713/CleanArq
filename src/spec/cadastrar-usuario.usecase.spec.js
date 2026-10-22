@@ -1,6 +1,7 @@
 
 
 const cadastrarUsuarioUseCase = require("../application/cadastrar-usuario.usecase");
+const Either = require("../shared/either/either");
 const AppError = require("../shared/errors/app.error");
 
 describe('Cadastrar ususario UseCase', function () {
@@ -23,7 +24,7 @@ describe('Cadastrar ususario UseCase', function () {
 
         const output = await sut(usuarioDTO);
 
-        expect(output).toBeUndefined();
+        expect(output.right).toBeNull();
         expect(usuariosRepository.cadastrar).toHaveBeenCalledWith(usuarioDTO);
         expect(usuariosRepository.cadastrar).toHaveBeenCalledTimes(1);
     });
@@ -33,11 +34,14 @@ describe('Cadastrar ususario UseCase', function () {
     });
 
     test('Deve retornar um erro se algum campo obrigatorio nao for fornecido', async function () {
-        const sut = cadastrarUsuarioUseCase({ usuariosRepository })
-        await expect(sut({})).rejects.toThrow(new AppError(AppError.parametrosObrigatoriosAusentes))
-    })
+        const sut = cadastrarUsuarioUseCase({ usuariosRepository });
+        const output = await sut({});
 
-    test('deve retornar um erro se o cpf ja estiver cadastrado, para nao cadastrar 2 vezes o mesmo', function () {
+        expect(output.right).toBeNull();
+        expect(output.left).toEqual(Either.valorNaoFornecido());
+    });
+
+    test('deve retornar um erro se o cpf ja estiver cadastrado, para nao cadastrar 2 vezes o mesmo', async function () {
         usuariosRepository.buscarPorCpf.mockReturnValue(true)
 
         const usuarioDTO = {
@@ -48,7 +52,11 @@ describe('Cadastrar ususario UseCase', function () {
             cpf: 'cpf_ja_cadastrado',
         }
         const sut = cadastrarUsuarioUseCase({ usuariosRepository })
+        const output = await sut(usuarioDTO)
 
-        expect(() => sut(usuarioDTO)).rejects.toThrow(new AppError(AppError.usuarioJaCadastrado))
+        expect(output.right).toBeNull()
+        expect(output.left).toEqual(Either.valorJaCadastrado('cpf'))
+        expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledWith(usuarioDTO.cpf)
+        expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledTimes(1)
     })
 });

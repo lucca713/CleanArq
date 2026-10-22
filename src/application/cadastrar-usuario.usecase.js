@@ -1,3 +1,4 @@
+const Either = require("../shared/either/either");
 const AppError = require("../shared/errors/app.error");
 
 module.exports = function cadastrarUsusarioUseCase({ usuariosRepository }) {
@@ -9,11 +10,11 @@ module.exports = function cadastrarUsusarioUseCase({ usuariosRepository }) {
         const checaCpf = await usuariosRepository.buscarPorCpf(cpf)
 
         if (checaCpf) {
-            throw new AppError(AppError.usuarioJaCadastrado)
+            return Either.Left(Either.valorJaCadastrado('cpf'))
         }
 
         if (!camposObrigatorios) {
-            throw new AppError(AppError.parametrosObrigatoriosAusentes);
+            return Either.Left(Either.valorNaoFornecido())
         }
 
         await usuariosRepository.cadastrar({
@@ -23,6 +24,7 @@ module.exports = function cadastrarUsusarioUseCase({ usuariosRepository }) {
             endereco,
             cpf
         });
+        return Either.Right(null)
     };
 
 
