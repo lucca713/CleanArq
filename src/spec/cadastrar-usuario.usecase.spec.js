@@ -1,6 +1,6 @@
 
 
-const cadastrarUsuarioUsecase = require("../application/cadastrar-usuario.usecase");
+const cadastrarUsuarioUseCase = require("../application/cadastrar-usuario.usecase");
 const AppError = require("../shared/errors/app.error");
 
 describe('Cadastrar ususario UseCase', function () {
@@ -18,7 +18,7 @@ describe('Cadastrar ususario UseCase', function () {
             cpf: 'CPF_valido',
         }
 
-        const sut = cadastrarUsuarioUsecase({ usuariosRepository });
+        const sut = cadastrarUsuarioUseCase({ usuariosRepository });
 
         const output = await sut(usuarioDTO);
 
@@ -28,12 +28,11 @@ describe('Cadastrar ususario UseCase', function () {
     });
 
     test('Deve retornar um erro quando o repositorio falhar', function () {
-
-        expect(() => cadastrarUsuarioUsecase({})).toThrow(new AppError(AppError.dependencias));
+        expect(() => cadastrarUsuarioUseCase({})).toThrow(new AppError(AppError.dependencias));
     });
 
     test('Deve retornar um erro se algum campo obrigatorio nao for fornecido', async function () {
-        const sut = cadastrarUsuarioUsecase({ usuariosRepository })
-        await expect(() => sut({})).rejects.toThrow(new AppError(AppError.parametrosObrigatoriosAusentes))
+        const sut = cadastrarUsuarioUseCase({ usuariosRepository })
+        await expect(sut({})).rejects.toThrow(new AppError(AppError.parametrosObrigatoriosAusentes))
     })
 });

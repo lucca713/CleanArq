@@ -4,7 +4,7 @@ describe('AppError', function () {
 
     test('AppError é uma instancia de Error', function () {
         const appError = new AppError('erro')
-        expect(appError).toBeinstanceOf(Error)
+        expect(appError).toBeInstanceOf(Error)
     })
 
     test('Garantir que o AppError tenha uma mensagem correta', function () {
