@@ -1,6 +1,7 @@
 
 
 const cadastrarUsuarioUsecase = require("../application/cadastrar-usuario.usecase");
+const AppError = require("../shared/errors/app.error");
 
 describe('Cadastrar ususario UseCase', function () {
     //mock
@@ -28,6 +29,6 @@ describe('Cadastrar ususario UseCase', function () {
 
     test('Deve retornar um erro quando o repositorio falhar', function () {
 
-        expect(() => cadastrarUsuarioUsecase({})).toThrow('Repository de usuario falhou')
+        expect(() => cadastrarUsuarioUsecase({})).toThrow(new AppError(AppError.dependencias));
     });
-})
+});
