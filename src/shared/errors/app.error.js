@@ -5,6 +5,6 @@ module.exports = class AppError extends Error {
     }
 
     static dependencias = 'Alguma dependendcias obrigatorio nao foi fornecida';
-    static parametrosObrigatoriosAusentes = 'Algum parametro obrigatorio nao foi fornecido'
-
+    static parametrosObrigatoriosAusentes = 'Algum parametro obrigatorio nao foi fornecido';
+    static usuarioJaCadastrado = 'Usuario ja cadastrado';
 }

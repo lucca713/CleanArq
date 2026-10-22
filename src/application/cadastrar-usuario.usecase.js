@@ -6,6 +6,11 @@ module.exports = function cadastrarUsusarioUseCase({ usuariosRepository }) {
     return async function ({ nome_completo, telefone, email, endereco, cpf }) {
         const camposObrigatorios = nome_completo && telefone && email && endereco && cpf
 
+        const checaCpf = await usuariosRepository.buscarPorCpf(cpf)
+
+        if (checaCpf) {
+            throw new AppError(AppError.usuarioJaCadastrado)
+        }
 
         if (!camposObrigatorios) {
             throw new AppError(AppError.parametrosObrigatoriosAusentes);

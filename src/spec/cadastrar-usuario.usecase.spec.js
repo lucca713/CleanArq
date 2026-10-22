@@ -6,7 +6,8 @@ const AppError = require("../shared/errors/app.error");
 describe('Cadastrar ususario UseCase', function () {
     //mock
     const usuariosRepository = {
-        cadastrar: jest.fn()
+        cadastrar: jest.fn(),
+        buscarPorCpf: jest.fn()
     }
 
     test('Deve poder cadastrar um usuario  ', async function () {
@@ -34,5 +35,20 @@ describe('Cadastrar ususario UseCase', function () {
     test('Deve retornar um erro se algum campo obrigatorio nao for fornecido', async function () {
         const sut = cadastrarUsuarioUseCase({ usuariosRepository })
         await expect(sut({})).rejects.toThrow(new AppError(AppError.parametrosObrigatoriosAusentes))
+    })
+
+    test('deve retornar um erro se o cpf ja estiver cadastrado, para nao cadastrar 2 vezes o mesmo', function () {
+        usuariosRepository.buscarPorCpf.mockReturnValue(true)
+
+        const usuarioDTO = {
+            nome_completo: 'nome_valido',
+            telefone: 'telefone_valido',
+            email: 'email_valido',
+            endereco: 'endereco_valido',
+            cpf: 'cpf_ja_cadastrado',
+        }
+        const sut = cadastrarUsuarioUseCase({ usuariosRepository })
+
+        expect(() => sut(usuarioDTO)).rejects.toThrow(new AppError(AppError.usuarioJaCadastrado))
     })
 });
