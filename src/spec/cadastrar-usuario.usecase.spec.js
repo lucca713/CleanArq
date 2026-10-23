@@ -8,7 +8,8 @@ describe('Cadastrar ususario UseCase', function () {
     //mock
     const usuariosRepository = {
         cadastrar: jest.fn(),
-        buscarPorCpf: jest.fn()
+        buscarPorCpf: jest.fn(),
+        bucarPorEmail: jest.fn()
     }
 
     test('Deve poder cadastrar um usuario  ', async function () {
@@ -57,6 +58,27 @@ describe('Cadastrar ususario UseCase', function () {
         expect(output.right).toBeNull()
         expect(output.left).toEqual(Either.valorJaCadastrado('cpf'))
         expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledWith(usuarioDTO.cpf)
-        expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledTimes(1)
+        expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledTimes(3)
+    })
+
+    test('Deve retornar um erro de o email for cadastrado 2 vezes', async function () {
+        usuariosRepository.buscarPorCpf.mockReturnValue(false)
+        usuariosRepository.bucarPorEmail.mockReturnValue(true)
+
+        const usuarioDTO = {
+            nome_completo: 'nome_valido',
+            telefone: 'telefone_valido',
+            email: 'email_ja_cadastrado',
+            endereco: 'endereco_valido',
+            cpf: 'cpf_valido',
+        }
+
+        const sut = cadastrarUsuarioUseCase({ usuariosRepository });
+        const output = await sut(usuarioDTO);
+
+        expect(output.right).toBeNull();
+        expect(output.left).toEqual(Either.valorJaCadastrado('email'));
+        expect(usuariosRepository.bucarPorEmail).toHaveBeenCalledWith(usuarioDTO.email);
+        expect(usuariosRepository.bucarPorEmail).toHaveBeenCalledTimes(4);
     })
 });

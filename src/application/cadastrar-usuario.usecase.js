@@ -9,8 +9,14 @@ module.exports = function cadastrarUsusarioUseCase({ usuariosRepository }) {
 
         const checaCpf = await usuariosRepository.buscarPorCpf(cpf)
 
+        const checaEmail = await usuariosRepository.bucarPorEmail(email)
+
         if (checaCpf) {
             return Either.Left(Either.valorJaCadastrado('cpf'))
+        }
+
+        if(checaEmail){
+            return Either.Left(Either.valorJaCadastrado('email'))
         }
 
         if (!camposObrigatorios) {
