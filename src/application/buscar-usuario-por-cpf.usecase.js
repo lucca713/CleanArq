@@ -1,3 +1,5 @@
+const Either = require("../shared/either/either")
+
 module.exports = function buscarUsuarioPorCpf({ usuariosRepository }) {
 
     return async function ({ cpf }) {
