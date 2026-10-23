@@ -1,5 +1,6 @@
 const buscarUsuarioPorCpfUsecase = require("../application/buscar-usuario-por-cpf.usecase")
 const Either = require("../shared/either/either")
+const AppError = require("../shared/errors/app.error")
 
 describe('Buscando usuario por cpf, usecase', function () {
     const usuariosRepository = {
@@ -45,4 +46,13 @@ describe('Buscando usuario por cpf, usecase', function () {
         expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledWith(cpfDto.cpf)
         expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledTimes(2)
     })
+
+    test('Deve retornar erro caso o cpf não for fornecido', async function () {
+        const sut = buscarUsuarioPorCpfUsecase({ usuariosRepository })
+        const output = await sut({})
+        expect(output.right).toBeNull()
+        expect(output.left).toEqual(Either.valorNaoFornecido())
+    });
+
+
 })
