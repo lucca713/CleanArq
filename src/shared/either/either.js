@@ -15,4 +15,8 @@ module.exports = class Either {
     static valorNaoFornecido() {
         return { message: `Valor nao fornecido` }
     }
+
+    static usuarioNaoEncontrado(valor) {
+        return { message: `${valor} nao foi encontrado` }
+    }
 }

@@ -1,4 +1,5 @@
 const buscarUsuarioPorCpfUsecase = require("../application/buscar-usuario-por-cpf.usecase")
+const Either = require("../shared/either/either")
 
 describe('Buscando usuario por cpf, usecase', function () {
     const usuariosRepository = {
@@ -28,5 +29,20 @@ describe('Buscando usuario por cpf, usecase', function () {
         expect(output.right).toEqual(outputDTO)
         expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledWith(cpfDoUsuario.cpf)
         expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledTimes(1)
+    })
+
+    test('Deve retornar null quando um cpf nao foi informado', async function () {
+        const cpfDto = {
+            cpf: 'cpf_nao_informado'
+        }
+
+        usuariosRepository.buscarPorCpf.mockResolvedValue(null)
+
+        const sut = buscarUsuarioPorCpfUsecase({ usuariosRepository })
+        const output = await sut(cpfDto)
+
+        expect(output.left).toEqual(Either.usuarioNaoEncontrado(cpfDto.cpf))
+        expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledWith(cpfDto.cpf)
+        expect(usuariosRepository.buscarPorCpf).toHaveBeenCalledTimes(2)
     })
 })
