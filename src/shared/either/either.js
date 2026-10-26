@@ -19,4 +19,7 @@ module.exports = class Either {
     static usuarioNaoEncontrado(valor) {
         return { message: `${valor} nao foi encontrado` }
     }
+    static isbnJaCadastrado(valor) {
+        return { message: `${valor} ja cadastrado` }
+    }
 }

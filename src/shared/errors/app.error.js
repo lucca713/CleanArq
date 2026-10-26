@@ -8,4 +8,5 @@ module.exports = class AppError extends Error {
     static parametrosObrigatoriosAusentes = 'Algum parametro obrigatorio nao foi fornecido';
     static usuarioJaCadastrado = 'Usuario ja cadastrado';
     static emailCadastrado = 'Email ja cadastrado';
+    static isbnJaCadastrado = 'ISBN ja cadastrado';
 }
