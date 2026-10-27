@@ -49,5 +49,12 @@ describe('Buscar livros por nome ou sbn', function () {
         expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledTimes(2)
     })
 
+    test('Deve retornar um erro se nenhum valor for fornecido', async function () {
+        const sut = buscarLivro({ livrosRepository })
+        const output = await sut({})
+        expect(output.left).toEqual(Either.valorNaoFornecido)
+        expect(output.right).toBeNull()
+    })
+
 
 })
