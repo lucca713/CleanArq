@@ -1,4 +1,5 @@
-const buscarLivro = require("../application/buscar-livro.usecase")
+const buscarLivro = require("../application/buscar-livro.usecase");
+const AppError = require("../shared/errors/app.error");
 
 describe('Buscar livros por nome ou sbn', function () {
     const livrosRepository = {
@@ -28,7 +29,7 @@ describe('Buscar livros por nome ou sbn', function () {
 
     });
 
-    test('Deve buscar livros por ISBN', function () {
-
+    test('Retorna um erro se o livro repository nao for fornecido', function () {
+        expect(() => buscarLivro({})).toThrow(new AppError(AppError.dependencias))
     })
 })
