@@ -22,4 +22,7 @@ module.exports = class Either {
     static isbnJaCadastrado(valor) {
         return { message: `${valor} ja cadastrado` }
     }
+    static livroNaoEncontrado(valor) {
+        return { message: `${valor} nao foi encontrado` }
+    }
 }

@@ -7,6 +7,10 @@ module.exports = function buscarLivro({ livrosRepository }) {
     return async function ({ valor }) {
         const livros = await livrosRepository.buscarPorNomeOuISBN(valor)
 
+        if (!livros) {
+            return Either.Left(Either.livroNaoEncontrado(valor))
+        }
+
         return Either.Right(livros)
     }
 }

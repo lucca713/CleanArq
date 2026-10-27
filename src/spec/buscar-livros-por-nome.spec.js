@@ -1,4 +1,5 @@
 const buscarLivro = require("../application/buscar-livro.usecase");
+const Either = require("../shared/either/either");
 const AppError = require("../shared/errors/app.error");
 
 describe('Buscar livros por nome ou sbn', function () {
@@ -30,6 +31,23 @@ describe('Buscar livros por nome ou sbn', function () {
     });
 
     test('Retorna um erro se o livro repository nao for fornecido', function () {
-        expect(() => buscarLivro({})).toThrow(new AppError(AppError.dependencias))
+        expect(() => buscarLivro({})).toThrow(new AppError(AppError.dependencias));
+    });
+
+    test('Retorna um erro se o livro nao for encontrado', async function () {
+
+        const buscaLivroDTO = {
+            valor: 'valor_valido',
+        };
+
+        livrosRepository.buscarPorNomeOuISBN.mockResolvedValue(null)
+
+        const sut = buscarLivro({ livrosRepository })
+        const output = await sut(buscaLivroDTO)
+        expect(output.left).toEqual(Either.livroNaoEncontrado(buscaLivroDTO.valor))
+        expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledWith(buscaLivroDTO.valor)
+        expect(livrosRepository.buscarPorNomeOuISBN).toHaveBeenCalledTimes(2)
     })
+
+
 })
