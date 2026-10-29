@@ -25,4 +25,12 @@ module.exports = class Either {
     static livroNaoEncontrado(valor) {
         return { message: `${valor} nao foi encontrado` }
     }
+
+    static dataRetornoInvalida() {
+        return { message: 'data de retorno menor que a data de saida' }
+    }
+
+    static LivroEmprestadoNaodevolvido() {
+        return { message: 'Livro emprestado nao devolvido' }
+    }
 }
