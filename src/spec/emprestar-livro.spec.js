@@ -1,5 +1,6 @@
 const emprestarLivroUsecase = require("../application/emprestar-livro.usecase")
 const Either = require("../shared/either/either")
+const AppError = require("../shared/errors/app.error")
 
 
 describe('Emprestar livro use case', function () {
@@ -52,5 +53,15 @@ describe('Emprestar livro use case', function () {
         expect(output.left).ToBe(Either.LivroEmprestadoNaodevolvido)
         expect(emprestimoRepositorio.existeLivroEmprestadoPendente).toHaveBeenCalledWith({ livro_id: emprestarLivroDto.livro_id, usuario_id: emprestarLivroDto.usuario_id })
         expect(emprestimoRepositorio.existeLivroEmprestadoPendente).toHaveBeenCalledTimes(2)
+    })
+
+    test('Deve retornar um erro se o emprestimo repositorio nao for fornecido', function () {
+        expect(() => emprestarLivroUsecase({})).toThrow(new AppError(AppError.dependencias))
+    })
+
+    test('Deve retornar um erro se algum campo obrigatorio nao for fornecido', async function () {
+        const sut = emprestarLivroUsecase({ emprestimoRepositorio })
+
+        await expect(() => sut({})).rejacts.toThrow(new AppError(AppError.parametrosObrigatoriosAusentes))
     })
 })
