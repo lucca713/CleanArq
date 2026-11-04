@@ -6,9 +6,9 @@ module.exports = function emprestarLivroUseCase({ emprestimoRepositorio }) {
         throw new AppError(AppError.dependencias)
     }
     return async function ({ usuarioId, livroId, dataSaida, dataRetorno }) {
-        const chegaCampos = usuarioId && livroId && dataSaida && dataRetorno
+        const checaCampos = usuarioId && livroId && dataSaida && dataRetorno
 
-        if (!chegaCampos) {
+        if (!checaCampos) {
             throw new AppError(AppError.parametrosObrigatoriosAusentes)
         }
 
