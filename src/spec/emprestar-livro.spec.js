@@ -37,4 +37,20 @@ describe('Emprestar livro use case', function () {
 
         expect(output.left).ToBe(Either.dataRetornoInvalida)
     })
+
+    test('nao deve permitir o emprestimo de um livro com o mesmo isbn para o mesmo usuario, sem ele ter devolvido', async function () {
+        emprestimoRepositorio.existeLivroEmprestadoPendente.mockResolvedValue(true)
+        const emprestarLivroDto = {
+            livro_id: 'qualquer_livro_id',
+            usuario_id: 'qualquer_usuario',
+            data_saida: new Date('2026-02-16'),
+            data_entra: new Date('2026-02-15')
+        }
+        const sut = emprestarLivroUsecase({ emprestimoRepositorio })
+        const output = await sut(emprestarLivroDto)
+
+        expect(output.left).ToBe(Either.LivroEmprestadoNaodevolvido)
+        expect(emprestimoRepositorio.existeLivroEmprestadoPendente).toHaveBeenCalledWith({ livro_id: emprestarLivroDto.livro_id, usuario_id: emprestarLivroDto.usuario_id })
+        expect(emprestimoRepositorio.existeLivroEmprestadoPendente).toHaveBeenCalledTimes(2)
+    })
 })

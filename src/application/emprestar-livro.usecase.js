@@ -16,7 +16,7 @@ module.exports = function emprestarLivroUseCase({ emprestimoRepositorio }) {
 
         const existeLivroEmprestadoPendente = await emprestimoRepositorio.existeLivroEmprestadoPendente(livrosId, usuarioId)
 
-        if (existeLivroEmprestadoPendente) return Either.LivroEmprestadoNaodevolvido
+        if (existeLivroEmprestadoPendente) return Either.Left(Either.LivroEmprestadoNaodevolvido)
 
         await emprestimoRepositorio.Emprestar({ usuarioId, livroId, dataSaida, dataRetorno })
 
